@@ -1,12 +1,19 @@
 import appointment_img from './appointment_img.png'
+<<<<<<< HEAD
 import header_img from './header_img.png'
+=======
+import header_img from './header_image.png'
+>>>>>>> upstream/main
 import group_profiles from './group_profiles.png'
 import profile_pic from './profile_pic.png'
 import contact_image from './contact_image.png'
 import about_image from './about_image.png'
 import logo from './logo.svg'
+<<<<<<< HEAD
 import logo1 from './logo1.svg'
 import logo2 from './logo2.png'
+=======
+>>>>>>> upstream/main
 import dropdown_icon from './dropdown_icon.svg'
 import menu_icon from './menu_icon.svg'
 import cross_icon from './cross_icon.png'
@@ -45,8 +52,11 @@ export const assets = {
     header_img,
     group_profiles,
     logo,
+<<<<<<< HEAD
     logo1,
     logo2,
+=======
+>>>>>>> upstream/main
     chats_icon,
     verified_icon,
     info_icon,
