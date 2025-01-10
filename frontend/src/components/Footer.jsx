@@ -16,11 +16,11 @@ const Footer = () => {
             {/* center section */}
             <div>
                 <p className='text-xl font-medium mb-4'>COMPANY</p>  
-                <ul className='flex flex-col text-sm gap-3  text-gray-600'>
-                    <li onClick={()=>{navigate('/')}}>Home</li>
-                    <li onClick={()=>{navigate('/about')}}>About us</li>
-                    <li onClick={()=>{navigate('/contact')}}>Contact us</li>
-                    <li onClick={()=>{navigate('/')}}>Privacy policy</li>
+                <ul className='flex flex-col text-sm gap-3 text-gray-600'>
+                    <li className='cursor-pointer' onClick={()=>{navigate('/')}}>Home</li>
+                    <li className='cursor-pointer' onClick={()=>{navigate('/about')}}>About us</li>
+                    <li className='cursor-pointer' onClick={()=>{navigate('/contact')}}>Contact us</li>
+                    <li className='cursor-pointer' onClick={()=>{navigate('/')}}>Privacy policy</li>
                 </ul>
             </div>
             {/* right section */}
