@@ -5,3 +5,6 @@
 ::-webkit-scrollbar{
     @apply hidden
 }
+.active hr {
+    @apply block
+}

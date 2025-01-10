@@ -1,6 +1,6 @@
 import React, { useEffect ,useState, useContext} from 'react'
 import { useParams,useNavigate } from 'react-router-dom'
-import { AppContext } from '../context/AppContext'
+import { AppContext } from '../contexts/AppContext'
 const Doctors = () => {
   const {speciality} = useParams();
   const [filterDoc,setFilterDoc]=useState([]);
