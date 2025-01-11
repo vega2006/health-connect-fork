@@ -33,6 +33,7 @@ const Footer = () => {
               className="cursor-pointer"
               onClick={() => {
                 navigate("/");
+                scrollTo(0,0);
               }}
             >
               Home
@@ -41,6 +42,7 @@ const Footer = () => {
               className="cursor-pointer"
               onClick={() => {
                 navigate("/about");
+                scrollTo(0, 0);
               }}
             >
               About us
@@ -49,6 +51,7 @@ const Footer = () => {
               className="cursor-pointer"
               onClick={() => {
                 navigate("/contact");
+                scrollTo(0,0);
               }}
             >
               Contact us
@@ -57,6 +60,7 @@ const Footer = () => {
               className="cursor-pointer"
               onClick={() => {
                 navigate("/");
+                scrollTo(0,0);
               }}
             >
               Privacy policy
