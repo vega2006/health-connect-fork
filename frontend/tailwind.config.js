@@ -6,10 +6,11 @@ export default {
   ],
   theme: {
     extend: {
-      colors:{primary:"#1acc82",
-        gridTemplateColumns:{
-          'auto':'repeat(auto-fill, minmax(200px, 1fr))'
-        },
+      fontFamily: {
+        montserratAlt: ['"Montserrat Alternates"', 'sans-serif'],
+      },
+      colors:{
+        primary:'#1acc82',
       }
     },
   },
