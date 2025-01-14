@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
 import AdminContext from '../context/AdminContext'
-import assets from '../assets/assets_admin/assets'
+import assets from '../assets/assets.js'
 
 const SideBar = () => {
     const { atoken } = useContext(AdminContext)

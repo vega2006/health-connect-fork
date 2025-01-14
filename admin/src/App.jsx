@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { AdminContext } from './context/AdminContext';
 import { useContext } from 'react';
 import Navbar from './components/Navbar'
+import SideBar from './components/SideBar';
 const App = () => {
   const {aToken}=useContext(AdminContext)
   return aToken? (
