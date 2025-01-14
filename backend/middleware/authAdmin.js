@@ -15,6 +15,7 @@ const authAdmin=async(req,res,next)=>{
         {
             return res.json({success:false,message:"not authorised login again"})
         }
+        next()
     } catch (error) {
         console.log(error)
         res.json({success:false,message:error.message})
