@@ -28,3 +28,4 @@ export const assets = {
     earning_icon,
     logo2
 }
+export default assets
