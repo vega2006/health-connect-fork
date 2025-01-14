@@ -15,29 +15,29 @@ const addDoctor=async(req,res)=>{
         //checking for all data for putting in data
         if(!name||!email||!password||!speciality||!degree||!experience||!about||!fees||!address)
         {
-            return res.status(400).json({success:false,message:"missing details"})
+            return res.json({success:false,message:"missing details"})
         }
 
         //validate email format
         if(!validator.isEmail(email))
         {
-            return res.status(400).json({success:false,message:"please enter a valid email"})
+            return res.json({success:false,message:"please enter a valid email"})
         }
 
         //validating strong password
         if(password.length<8)
         {
-            return res.status(400).json({success:false,message:"please enter a strong password"})
+            return res.json({success:false,message:"please enter a strong password"})
         }
 
         //hashing doctor password
         const salt=await bcrypt.genSalt(10)
         const hashedPassword=await bcrypt.hash(password,salt)
-
+        
         //upload image to cloudinary
         const imageUpload=await cloudinary.uploader.upload(imageFile.path,{resource_type:'image'});
         const imageUrl=imageUpload.secure_url;
-
+        
         const doctorData={
             name,
             email,
@@ -51,16 +51,17 @@ const addDoctor=async(req,res)=>{
             address:JSON.parse(address),
             date:Date.now()
         }
-
+        
         const newDoctor=new doctorModel(doctorData);
+        
         await newDoctor.save();
-
-        res.status(200).json({success:true,message:"doctor created"});
+        
+        res.json({success:true,message:"doctor created"});
     }
     catch(error)
     {
         console.log(error)
-        res.status(400).json({status:false,message:error.message})
+        res.json({status:false,message:error.message})
     }
 }
 
