@@ -43,7 +43,7 @@ const AddDoctor = () => {
             formData.append('speciality', speciality)
             formData.append('degree', degree)
             formData.append('address', JSON.stringify({ line1: address1, line2: address2 }))
-
+                
             // console log formdata            
             // formData.forEach((value, key) => {
             //     console.log(`${key}: ${value}`);
@@ -78,7 +78,7 @@ const AddDoctor = () => {
     }
 
     return (
-        <form onSubmit={onSubmitHandler} className='m-5 w-full'>
+        <form onSubmit={onSubmitHandler} className='m-5 right-0 w-full'>
 
             <p className='mb-3 text-lg font-medium'>Add Doctor</p>
 
