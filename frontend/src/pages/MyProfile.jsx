@@ -1,22 +1,57 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { assets } from "../assets/assets_frontend/assets";
+import { AppContext } from "../contexts/AppContext";
+import { toast } from "react-toastify";
+import axios from 'axios'
 const MyProfile = () => {
   const [isEdit, setIsEdit] = useState(false);
-  const [userData, setUserData] = useState({
-    name: "Deepesh",
-    image: assets.profile_pic,
-    email: "deepesh639394@gmail.com",
-    phone: "000000000",
-    address: {
-      line1: "besides local school on the road",
-      line2: "lucknow,up",
-    },
-    gender: "Male",
-    dob: "21-10-2005",
-  });
-  return (
+  const {userData,setUserData,token,backendUrl,loadUserProfileData}=useContext(AppContext);
+  const [image,setImage]=useState(false)
+  const updateUserProfileData=async ()=>{
+    try{
+      const formData=new FormData()
+      formData.append('name',userData.name)
+      formData.append('phone',userData.phone)
+      formData.append('address',JSON.stringify(userData.address))
+      formData.append('gender',userData.gender)
+      formData.append('dob',userData.dob)
+      image && formData.append('image',image);
+
+      const {data}=await axios.post(backendUrl+'/api/user/update-profile', formData, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
+      if(data.success){
+        toast.success("updated successfully")
+        await loadUserProfileData()
+        setIsEdit(false)
+        setImage(false)
+      }
+      else{
+        toast.error(data.message)
+      }
+    }catch(e){
+      console.log(e);
+      toast.error(e.message);
+    }
+  }
+
+  return userData && (
     <div className="max-w-lg flex flex-col gap-2 text-sm">
-      <img className="w-36 rounded" src={userData.image} alt="" />
+
+      {
+        isEdit ? <label htmlFor="image">
+            <div className="inline-block relative cursor-pointer">
+            <img className="w-36 rounded opacity-75" src={ image ? URL.createObjectURL(image) : userData.image} alt=""></img>
+            <img className="w-10 absolute bottom-12 right-12" src={ image ? '' : assets.upload_icon} alt=""></img>
+            </div>
+            <input onChange={(e)=>setImage(e.target.files[0])} type="file" name="" id="image" hidden/>
+        </label> :
+        <img className="w-36 rounded" src={userData.image} alt="" />
+      }
+
+      
       {isEdit === true ? (
         <input
           className="bg-gray-50 text-3xl font-medium max-w-60 mt-4"
@@ -50,7 +85,7 @@ const MyProfile = () => {
                 }}
               ></input>
             ) : (
-              <p className="text-blue-500">{userData.phone}</p>
+              <span className="text-blue-500">{userData.phone}</span>
             )}
           </p>
           <p className="font-medium">Address:</p>
@@ -105,7 +140,7 @@ const MyProfile = () => {
               <option value="Female">Female</option>
             </select>
           ) : (
-            <p className="text-gray-500">{userData.gender}</p>
+            <span className="text-gray-500">{userData.gender}</span>
           )}
           <p className="font-medium">Birthday:</p>
           <p>
@@ -114,12 +149,12 @@ const MyProfile = () => {
                 type="date"
                 className="max-w-28 bg-gray-50"
                 onChange={(e) => {
-                  setUserData((prev) => ({ ...prev, dob: e.target.dob }));
+                  setUserData((prev) => ({ ...prev, dob: e.target.value }));
                 }}
                 value={userData.dob}
               />
             ) : (
-              <p className="text-gray-500">{userData.dob}</p>
+              <span className="text-gray-500">{userData.dob}</span>
             )}
           </p>
         </div>
@@ -128,7 +163,7 @@ const MyProfile = () => {
         {isEdit ? (
           <button
             className="border border-primary px-8 py-2 rounded-full hover:bg-primary hover:text-white transition-all"
-            onClick={() => setIsEdit(!isEdit)}
+            onClick={() => updateUserProfileData()}
           >
             Save Information
           </button>
