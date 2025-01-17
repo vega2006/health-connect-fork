@@ -85,7 +85,13 @@ const Appointment = () => {
     }
 
     try {
-      const date =docSlots[slotIndex][0].datetime;
+      if(slotTime==="")
+      {
+        toast.error("Please Select Slot Time")
+        
+      }
+      else{
+        const date =docSlots[slotIndex][0].datetime;
       let day=date.getDate() 
       let month=date.getMonth()+1;
       let year=date.getFullYear()
@@ -102,6 +108,8 @@ const Appointment = () => {
       {
         toast.error(data.message);
       }
+      }
+      
     } catch (error) {
       console.log(error)
       toast.error(error.message);
