@@ -2,9 +2,11 @@ import React, { useContext,useState, useEffect } from "react";
 import { AppContext } from "../contexts/AppContext";
 import axios from "axios";
 import { toast } from "react-toastify";
-
+import {useNavigate } from 'react-router-dom'
 const MyAppointments = () => {
+ 
   const { backendUrl ,token ,getDoctorsData } = useContext(AppContext);
+  const navigate=useNavigate()
   const [appointments,setAppointments ]=useState([]);
   const months = ["","Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const slotDateFormat=(slotDate)=>{
@@ -16,7 +18,9 @@ const MyAppointments = () => {
       const {data}=await axios.get(backendUrl+'/api/user/appointments',{headers:{'Authorization':`Bearer ${token}`}})
       if(data.success)
       {
-        setAppointments(data.appointments.reverse());        
+        setAppointments(data.appointments.reverse());     
+        console.log(data.appointments);
+           
       }
      
     } catch (error) {
@@ -49,6 +53,59 @@ const MyAppointments = () => {
 
   }
 
+
+    const initPay=(order)=>{
+      const options={
+        key:import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount:order.amount,
+        currency:order.currency,
+        name:'Appointment Payment',
+        description:'Appointment Payment',
+        order_id:order.id,
+        receipt:order.receipt,
+        handler:async(response)=>{
+          console.log("response now");
+          
+          console.log(response);
+          try{
+            const {data}=await  axios.post(backendUrl+'/api/user/verifyRazorpay',response,{headers:{
+              'Authorization':`Bearer ${token}`
+            }})
+            if(data.success){
+              getUserAppointments()
+              console.log("sdfdsf");
+              
+              navigate('/my-appointments')
+            }
+          }catch(e){
+            console.log(e);
+            toast.error(e.message)
+            
+          }
+        }
+      }
+      const rzp=new window.Razorpay(options)
+      rzp.open()
+    }
+  const appointmentRazorpay=async (appointmentId)=>{
+    // console.log(appointmentId);
+    
+    try{
+      const {data}=await axios.post(backendUrl+"/api/user/payment-razorpay",{appointmentId},{headers:{'Authorization':`Bearer ${token}`}})
+      // console.log(data);
+      
+      if(data.success===true){
+          initPay(data.order)
+      }
+      else{
+
+      }
+    }catch(e){
+      console.log(e.message);
+      
+    }
+  }
+
   useEffect(()=>{
     if(token)
     {
@@ -58,9 +115,11 @@ const MyAppointments = () => {
 
   return (
     <div>
-      <p className="pb-3 mt-12 font-medium text-zinc-700 border-b">
+      <div className="pb-3 mt-12 font-medium text-zinc-700 border-b">
+      <p className="">
         My Appointments
       </p>
+      </div>
       <div>
         {appointments.map((item, index) => (
           <div
@@ -85,7 +144,8 @@ const MyAppointments = () => {
             </div>
             <div></div>
             <div className="flex flex-col gap-2 justify-end">
-              {!item.cancelled &&<button className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-primary hover:text-white transition-all duration-300">Pay Online
+              {!item.cancelled && item.payment && <button className="sm:min-w-48 py-2 border rounded text-stone-500 bg-indigo-50">Paid</button>}
+              {!item.cancelled && !item.payment && <button onClick={()=>appointmentRazorpay(item._id)} className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-primary hover:text-white transition-all duration-300">Pay Online
                 </button>}
                 
                 {!item.cancelled &&<button onClick={()=>{cancelAppointment(item._id)}} className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-red-600 hover:text-white transition-all duration-300">
