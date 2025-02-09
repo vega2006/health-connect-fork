@@ -146,7 +146,7 @@ const appointmentsAdmin = async (req, res) => {
   try {
     const appointments = await appointmentModel.find({});
     res.json({ success: true, appointments });
-  } catch (e) {
+  } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
   }
