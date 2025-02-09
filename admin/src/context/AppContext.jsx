@@ -4,7 +4,7 @@ export const AppContext=createContext();
     
 const AppContextProvider = (props) => {
     const backendUrl=import.meta.env.VITE_BACKEND_URL;
-
+    const currency = import.meta.env.VITE_CURRENCY
     const calculateAge=(dob)=>{
         const today=new Date()
         const birthDate=new Date(dob)
@@ -21,6 +21,7 @@ const AppContextProvider = (props) => {
     const value={
         backendUrl,
         slotDateFormat,
+        currency,
         calculateAge
     }
 
