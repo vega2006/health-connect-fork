@@ -13,7 +13,7 @@ const AdminContextProvider = (props) => {
     localStorage.getItem("aToken") ? localStorage.getItem("aToken") : ""
   );
 
-
+  const [dashData,setDashData]=useState(false);
 
 
 
@@ -76,6 +76,24 @@ const AdminContextProvider = (props) => {
       toast.error(error.message);  
     }
   }
+  const getDashData=async()=>{
+    try {
+      const {data}=await axios.get(backendUrl+"/api/admin/dashboard",{headers: {
+        "Authorization": `Bearer ${aToken}`
+      }})
+      if(data.success)
+      {
+        setDashData(data.dashData);
+        console.log(data);
+      }
+      else
+      {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);   
+    }
+  }
 
 
   const cancelAppointment=async (appointmentId)=>{
@@ -105,6 +123,8 @@ const AdminContextProvider = (props) => {
     appointments,
     getAllDoctors,
     changeAvailability,
+    dashData,
+    getDashData,
     getAllAppointments,
     cancelAppointment
 
