@@ -21,7 +21,7 @@ const Navbar = () => {
                     />
                     <div className='flex flex-col'>
                         <span className="text-2xl font-bold">Health Connect</span>
-                        <span className='text-sm font-medium text-gray-900'>Admin Dashboard</span>
+                        { aToken? <span className='text-sm font-medium text-gray-900'> Admin Dashboard</span> : <span className='text-sm font-medium text-gray-900'> Doctor Dashboard</span>}
                     </div>
                   </div>   
             <p className='mt-[-14px] text-sm border px-2.5 py-0.5 rounded-full border-gray-500 text-gray-500 font-medium' >{aToken ? 'Admin' : 'Doctor'}</p>
