@@ -99,8 +99,63 @@ const updateProfile = async (req, res) => {
   }
 };
 
-//Api to book appointment
+//Api to book appointments
+//online Appointment
+const bookOnlineAppointment=async (req,res)=>
+{
+  try {
+    const randomNumber=Math.floor(Math.random() * 100000000);
+    const { userId, docId, slotDate, slotTime } = req.body;
+    const docData = await doctorModel.findById(docId).select("-password");
 
+    if (!docData.available) {
+      return res.json({ success: false, message: "Doctor not available" });
+    }
+    const slots_booked = docData.slots_booked;
+
+    //checking for slots availiblity
+    if (slots_booked[slotDate]) {
+      if (slots_booked[slotDate].includes(slotTime)) {
+        return res.json({ success: false, message: "Slot not available" });
+      } else {
+        slots_booked[slotDate].push(slotTime);
+      }
+    } else {
+      slots_booked[slotDate] = [];
+      slots_booked[slotDate].push(slotTime);
+    }
+
+    const userData = await userModel.findById(userId).select("-password");
+
+    delete docData.slots_booked;
+
+    const appointmentData = {
+      userId,
+      docId,
+      userData,
+      docData,
+      amount: docData.fees,
+      slotTime,
+      slotDate,
+      date: Date.now(),
+      isOnline: true,
+      uniqueNumber:randomNumber
+    };
+
+    const newAppointment = new appointmentModel(appointmentData);
+    await newAppointment.save();
+
+    //update docter slot_data
+    await doctorModel.findByIdAndUpdate(docId, { slots_booked });
+    res.json({ success: true, message: "Appointment Booked" });
+  } catch (error) {
+    console.log(e);
+    res.json({ success: false, message: e.message });
+  }
+};
+
+
+//visit a doctor appointment
 const bookAppointment = async (req, res) => {
   try {
     const { userId, docId, slotDate, slotTime } = req.body;
@@ -246,6 +301,18 @@ const verifyRazorpay = async (req, res) => {
   }
 };
 
+//api to get user data
+const userData = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const userData = await userModel.findById(userId).select("-password");
+    res.json({ success: true, userData });
+  } catch (e) {
+    console.log(e);
+    res.json({ success: false, message: e.message });
+  }
+};
+
 export {
   registerUser,
   userLogin,
@@ -256,4 +323,6 @@ export {
   cancelAppointment,
   paymentRazorpay,
   verifyRazorpay,
+  bookOnlineAppointment,
+  userData,
 };
