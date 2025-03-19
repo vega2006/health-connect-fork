@@ -77,6 +77,45 @@ const Appointment = () => {
     }
   };
 
+  const bookOnlineAppointment=async()=>{
+    if(!token)
+      {
+        toast.warn('Login to book appointment')
+        return navigate('/login')
+      }
+  
+      try {
+        if(slotTime==="")
+        {
+          toast.error("Please Select Slot Time")
+          
+        }
+        else{
+          const date =docSlots[slotIndex][0].datetime;
+        let day=date.getDate() 
+        let month=date.getMonth()+1;
+        let year=date.getFullYear()
+        const slotDate=day+"_"+month+"_"+year;
+        
+        const {data}=await axios.post(backendUrl+'/api/user/book-online-appointment',{docId,slotDate,slotTime},{headers:{'Authorization':`Bearer ${token}`}})
+        
+        if (data.success) {
+          toast.success(data.message);
+          getDoctorsData();
+          navigate('/my-appointments');
+        }
+        else
+        {
+          toast.error(data.message);
+        }
+        }
+        
+      } catch (error) {
+        console.log(error)
+        toast.error(error.message);
+      }
+  
+  }
   const bookAppointment =async()=>{
     if(!token)
     {
@@ -194,7 +233,10 @@ const Appointment = () => {
                     ))}
                 </div>
 
-                <button onClick={bookAppointment} className='bg-primary text-white text-sm font-light px-20 py-3 rounded-full my-6'>Book an appointment</button>
+                <div className="flex gap-6 flex-row">
+                <button onClick={bookAppointment} className='bg-primary text-white text-sm font-light px-20 py-3 rounded-full my-6'>Book a visit</button>
+                <button onClick={bookOnlineAppointment} className='bg-primary text-white text-sm font-light px-20 py-3 rounded-full my-6'>Book an online Appointment</button>
+                </div>
             </div>
         {/* related doctors */}
         <div>
