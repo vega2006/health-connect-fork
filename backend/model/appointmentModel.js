@@ -12,6 +12,8 @@ const appointmentSchema = new mongoose.Schema({
   cancelled: { type: Boolean, default: false },
   payment: { type: Boolean, default: false },
   isCompleted: { type: Boolean, default: false },
+  isOnline:{type:Boolean,default:false},
+  uniqueNumber:{type:Number,default:0},
 });
 
 const appointmentModel =
